@@ -30,7 +30,7 @@ export default async function handler(
     case "POST":
       const { origin, destination, weight } = await req.body;
 
-      const costs = await Promise.all(
+      const courierResults = await Promise.all(
         couriers.map((courier) =>
           fetch("https://api.rajaongkir.com/starter/cost", {
             method: "POST",
@@ -45,12 +45,24 @@ export default async function handler(
               courier,
             }),
           })
-            .then((result) => result.json())
-            .then((cost) => cost.rajaongkir.results[0])
+            .then((response) => response.json())
+            .then((result) => ({
+              origin: result.rajaongkir.origin_details.city_name,
+              destination: result.rajaongkir.dsetination_details.city_name,
+              courierCost: result.rajaongkir.results[0],
+            }))
         )
       );
 
-      res.status(200).json(costs);
+      const courierCosts = courierResults.map((courier) => courier.courierCost);
+
+      res
+        .status(200)
+        .json({
+          origin: courierResults[0].origin,
+          destination: courierResults[0].destination,
+          courierCosts,
+        });
 
       break;
 
