@@ -48,7 +48,7 @@ export default async function handler(
             .then((response) => response.json())
             .then((result) => ({
               origin: result.rajaongkir.origin_details.city_name,
-              destination: result.rajaongkir.dsetination_details.city_name,
+              destination: result.rajaongkir.destination_details.city_name,
               courierCost: result.rajaongkir.results[0],
             }))
         )
@@ -56,13 +56,11 @@ export default async function handler(
 
       const courierCosts = courierResults.map((courier) => courier.courierCost);
 
-      res
-        .status(200)
-        .json({
-          origin: courierResults[0].origin,
-          destination: courierResults[0].destination,
-          courierCosts,
-        });
+      res.status(200).json({
+        origin: courierResults[0].origin,
+        destination: courierResults[0].destination,
+        courierCosts,
+      });
 
       break;
 
