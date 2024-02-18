@@ -35,7 +35,7 @@ export default async function handler(
           fetch("https://api.rajaongkir.com/starter/cost", {
             method: "POST",
             headers: {
-              key: "fb406acbbd2d68580091ae724ae81a76",
+              key: process.env.API_KEY as string,
               "Content-Type": "application/x-www-form-urlencoded",
             },
             body: new URLSearchParams({
